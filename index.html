@@ -11,7 +11,7 @@
     height: 100vh;
     background: black;
     overflow: hidden;
-    font-family: 'Comic Sans MS', cursive;
+    font-family: Arial, sans-serif;
   }
 
   /* Stars */
@@ -30,31 +30,36 @@
   /* Falling text */
   .falling-text {
     position: absolute;
-    font-size: clamp(1.2em, 4vw, 1.6em); /* consistent size across devices */
+    font-size: 22px;
     color: white;
     text-shadow: 0 0 5px #fff, 0 0 10px white, 0 0 15px white;
-    animation: fall linear forwards, fadeInOut 3s ease-in-out forwards;
+    animation: fall linear forwards;
     white-space: nowrap;
     pointer-events: none;
   }
 
-  @keyframes fall {
-    0% { transform: translateY(-50px); }
-    100% { transform: translateY(110vh); }
+  /* Hearts */
+  .falling-heart {
+    position: absolute;
+    font-size: 28px;
+    animation: drop 3s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
+    pointer-events: none;
   }
 
-  @keyframes fadeInOut {
-    0% { opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { opacity: 0; }
+  @keyframes fall {
+    0% { transform: translateY(-60px); opacity: 1; }
+    100% { transform: translateY(110vh); opacity: 0.8; }
+  }
+
+  @keyframes drop {
+    0% { transform: translateY(-60px); opacity: 1; }
+    100% { transform: translateY(110vh); opacity: 1; }
   }
 </style>
 </head>
 <body>
 
 <script>
-  // Messages
   const messages = [
     "I love you 💖",
     "I love you forever baby ♾️",
@@ -67,8 +72,7 @@
   ];
 
   // Create stars
-  const starCount = 150; // same for all devices
-  for (let i = 0; i < starCount; i++) {
+  for (let i = 0; i < 150; i++) {
     const star = document.createElement("div");
     star.classList.add("star");
     const size = Math.random() * 2 + 1;
@@ -79,25 +83,33 @@
     document.body.appendChild(star);
   }
 
+  // Spawn hearts
+  function spawnHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("falling-heart");
+    heart.textContent = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 3000);
+  }
+
   // Spawn messages
   function spawnMessage() {
     const text = document.createElement("div");
     text.classList.add("falling-text");
     text.textContent = messages[Math.floor(Math.random() * messages.length)];
     text.style.left = Math.random() * 85 + "vw";
-
-    const duration = Math.random() * 1.5 + 2.5; // 2.5–4s fall speed (faster)
-    text.style.animationDuration = `${duration}s, 3s`;
-
+    text.style.animationDuration = (Math.random() * 1.5 + 2.5) + "s";
     document.body.appendChild(text);
-
-    setTimeout(() => {
-      text.remove();
-    }, duration * 1000);
+    setTimeout(() => text.remove(), 5000);
   }
 
-  // Faster spawn rate (more messages per second)
-  setInterval(spawnMessage, 500);
+  // Hearts flood for first 3s
+  const heartInterval = setInterval(spawnHeart, 40); // very frequent hearts
+  setTimeout(() => {
+    clearInterval(heartInterval);
+    setInterval(spawnMessage, 300); // then text starts
+  }, 3000);
 </script>
 
 </body>
