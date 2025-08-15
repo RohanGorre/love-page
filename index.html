@@ -9,12 +9,12 @@
     margin: 0;
     padding: 0;
     height: 100vh;
-    background: black; /* Pure night sky */
+    background: black;
     overflow: hidden;
     font-family: 'Comic Sans MS', cursive;
   }
 
-  /* Star background effect */
+  /* Stars */
   .star {
     position: absolute;
     background: white;
@@ -27,19 +27,27 @@
     to { opacity: 1; }
   }
 
-  /* Falling text style */
+  /* Falling text */
   .falling-text {
     position: absolute;
-    font-size: 1.5em;
+    font-size: clamp(1em, 4vw, 1.6em); /* Auto adjust for mobile */
     color: white;
-    text-shadow: 0 0 5px #fff, 0 0 15px #fff, 0 0 25px #fff;
-    animation: fall linear;
+    text-shadow: 0 0 5px #fff, 0 0 10px white, 0 0 15px white;
+    animation: fall linear forwards, fadeInOut 4s ease-in-out forwards;
     white-space: nowrap;
+    pointer-events: none;
   }
 
   @keyframes fall {
-    0% { transform: translateY(-100px); opacity: 1; }
-    100% { transform: translateY(110vh); opacity: 0; }
+    0% { transform: translateY(-50px); }
+    100% { transform: translateY(110vh); }
+  }
+
+  @keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
   }
 </style>
 </head>
@@ -59,7 +67,8 @@
   ];
 
   // Create stars
-  for (let i = 0; i < 150; i++) {
+  const starCount = window.innerWidth < 768 ? 80 : 150; // fewer stars for mobile
+  for (let i = 0; i < starCount; i++) {
     const star = document.createElement("div");
     star.classList.add("star");
     const size = Math.random() * 2 + 1;
@@ -70,23 +79,25 @@
     document.body.appendChild(star);
   }
 
-  // Function to spawn a falling message
+  // Spawn messages
   function spawnMessage() {
     const text = document.createElement("div");
     text.classList.add("falling-text");
     text.textContent = messages[Math.floor(Math.random() * messages.length)];
-    text.style.left = Math.random() * 90 + "vw";
-    text.style.animationDuration = (Math.random() * 2 + 3) + "s"; // 3–5s fall
+    text.style.left = Math.random() * 85 + "vw";
+    const duration = Math.random() * 2 + 4; // 4–6s fall
+    text.style.animationDuration = `${duration}s, 4s`;
+
     document.body.appendChild(text);
 
-    // Remove after animation
     setTimeout(() => {
       text.remove();
-    }, 6000);
+    }, duration * 1000);
   }
 
-  // Spawn messages continuously
-  setInterval(spawnMessage, 700); // every 0.7s
+  // Mobile: slower drop rate
+  const dropRate = window.innerWidth < 768 ? 2000 : 1500;
+  setInterval(spawnMessage, dropRate);
 </script>
 
 </body>
