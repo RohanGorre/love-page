@@ -30,10 +30,10 @@
   /* Falling text */
   .falling-text {
     position: absolute;
-    font-size: clamp(1em, 4vw, 1.6em); /* Auto adjust for mobile */
+    font-size: clamp(1.2em, 4vw, 1.6em); /* consistent size across devices */
     color: white;
     text-shadow: 0 0 5px #fff, 0 0 10px white, 0 0 15px white;
-    animation: fall linear forwards, fadeInOut 4s ease-in-out forwards;
+    animation: fall linear forwards, fadeInOut 3s ease-in-out forwards;
     white-space: nowrap;
     pointer-events: none;
   }
@@ -67,7 +67,7 @@
   ];
 
   // Create stars
-  const starCount = window.innerWidth < 768 ? 80 : 150; // fewer stars for mobile
+  const starCount = 150; // same for all devices
   for (let i = 0; i < starCount; i++) {
     const star = document.createElement("div");
     star.classList.add("star");
@@ -85,8 +85,9 @@
     text.classList.add("falling-text");
     text.textContent = messages[Math.floor(Math.random() * messages.length)];
     text.style.left = Math.random() * 85 + "vw";
-    const duration = Math.random() * 2 + 4; // 4–6s fall
-    text.style.animationDuration = `${duration}s, 4s`;
+
+    const duration = Math.random() * 1.5 + 2.5; // 2.5–4s fall speed (faster)
+    text.style.animationDuration = `${duration}s, 3s`;
 
     document.body.appendChild(text);
 
@@ -95,9 +96,8 @@
     }, duration * 1000);
   }
 
-  // Mobile: slower drop rate
-  const dropRate = window.innerWidth < 768 ? 2000 : 1500;
-  setInterval(spawnMessage, dropRate);
+  // Faster spawn rate (more messages per second)
+  setInterval(spawnMessage, 500);
 </script>
 
 </body>
