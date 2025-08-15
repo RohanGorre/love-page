@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Love 💖</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: black; /* Pure night sky */
+    overflow: hidden;
+    font-family: 'Comic Sans MS', cursive;
+  }
+
+  /* Star background effect */
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite alternate;
+  }
+
+  @keyframes twinkle {
+    from { opacity: 0.3; }
+    to { opacity: 1; }
+  }
+
+  /* Falling text style */
+  .falling-text {
+    position: absolute;
+    font-size: 1.5em;
+    color: white;
+    text-shadow: 0 0 5px #fff, 0 0 15px #fff, 0 0 25px #fff;
+    animation: fall linear;
+    white-space: nowrap;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(-100px); opacity: 1; }
+    100% { transform: translateY(110vh); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<script>
+  // Messages
+  const messages = [
+    "I love you 💖",
+    "I love you forever baby ♾️",
+    "I love you 🥰",
+    "I love you ♥️",
+    "Love you <333",
+    "Let’s get married 💍",
+    "Be with me 🌙",
+    "For you my Sidd ♥️"
+  ];
+
+  // Create stars
+  for (let i = 0; i < 150; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    const size = Math.random() * 2 + 1;
+    star.style.width = size + "px";
+    star.style.height = size + "px";
+    star.style.top = Math.random() * 100 + "%";
+    star.style.left = Math.random() * 100 + "%";
+    document.body.appendChild(star);
+  }
+
+  // Function to spawn a falling message
+  function spawnMessage() {
+    const text = document.createElement("div");
+    text.classList.add("falling-text");
+    text.textContent = messages[Math.floor(Math.random() * messages.length)];
+    text.style.left = Math.random() * 90 + "vw";
+    text.style.animationDuration = (Math.random() * 2 + 3) + "s"; // 3–5s fall
+    document.body.appendChild(text);
+
+    // Remove after animation
+    setTimeout(() => {
+      text.remove();
+    }, 6000);
+  }
+
+  // Spawn messages continuously
+  setInterval(spawnMessage, 700); // every 0.7s
+</script>
+
+</body>
+</html>
